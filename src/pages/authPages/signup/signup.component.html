@@ -1,0 +1,30 @@
+<!-- signup.component.html -->
+<div class="container signup-container mt-5 p-4 rounded shadow-sm bg-light">
+  <h2 class="text-center text-primary mb-4">Sign Up</h2>
+
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    @for (field of fields; track field.formControlName) {
+      <div class="mb-3">
+        <label [for]="field.formControlName" class="form-label custom-label">{{ field.label }}</label>
+        <input 
+          [type]="field.type" 
+          [id]="field.formControlName" 
+          class="form-control custom-input" 
+          formControlName="{{field.formControlName}}" 
+          placeholder="Enter your {{field.label.toLowerCase()}}" 
+        />
+        @if (signupForm.get(field.formControlName)?.touched && signupForm.get(field.formControlName)?.invalid) {
+          <div class="text-danger small mt-1">
+            @if (signupForm.get(field.formControlName)?.errors?.['required']) {
+              {{field.label}} is required.
+            } @else if (field.formControlName == 'email' && signupForm.get('email')?.errors?.['email']) {
+              Please enter a valid email.
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <button type="submit" class="btn btn-primary w-100 custom-btn" [disabled]="!signupForm.valid">Register</button>
+  </form>
+</div>
